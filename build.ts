@@ -1,4 +1,5 @@
 import { Buffer } from "node:buffer";
+import { brotliCompressSync } from "node:zlib";
 import { minify } from "@minify-html/node";
 
 /** Bun compilation result of source HTML. */
@@ -47,6 +48,10 @@ const data = new TextEncoder().encode(outputHTML);
 /** Data compressed over gzip. */
 const gzip = Bun.gzipSync(data);
 
+/** Data compressed over brotli. */
+const brotli = brotliCompressSync(data);
+
 // Log file sizes to console:
 console.log(`Original Size: ${data.byteLength} bytes.`);
 console.log(`Gzip Size:     ${gzip.byteLength} bytes.`);
+console.log(`Brotli Size:   ${brotli.byteLength} bytes.`);
