@@ -8,7 +8,11 @@ const result = await Bun.build({
 	outdir: "./build",
 	compile: true,
 	target: "browser",
-	minify: true
+	minify: true,
+	jsx: {
+		runtime: "automatic",
+		importSource: "@functions/jsx-runtime",
+	}
 });
 
 // Error out if bundle fails:
