@@ -9,7 +9,7 @@
 		"module": "Preserve",
 		"moduleDetection": "force",
 		"jsx": "react-jsx",
-		"jsxImportSource": "../tooling",
+		"jsxImportSource": "../.tooling",
 		"allowJs": true,
 		"types": [
 			"bun"
