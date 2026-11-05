@@ -2,10 +2,11 @@ import { Buffer } from "node:buffer";
 import { brotliCompressSync } from "node:zlib";
 import { minify } from "@minify-html/node";
 
-for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src/pages" })) {
+for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src" })) {
 	/** Bun compilation result of source HTML. */
 	const result = await Bun.build({
-		entrypoints: [`./src/pages/${file}`],
+		entrypoints: [`./src/${file}`],
+		root: "./src",
 		outdir: "./build",
 		compile: true,
 		target: "browser",

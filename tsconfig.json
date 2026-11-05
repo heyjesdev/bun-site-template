@@ -32,8 +32,7 @@
 		"paths": {
 			"@components/*": ["./src/components/*"],
 			"@functions/*": ["./src/functions/*"],
-			"@packages/*": ["./src/packages/*"],
-			"@pages/*": ["./src/pages/*"]
+			"@packages/*": ["./src/packages/*"]
 		}
 	}
 }
