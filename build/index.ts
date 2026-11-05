@@ -1,7 +1,10 @@
-import { access, cp } from "node:fs/promises";
+import { access, cp, rm } from "node:fs/promises";
 import { Buffer } from "node:buffer";
 import { brotliCompressSync } from "node:zlib";
 import { minify } from "@minify-html/node";
+
+// Remove existing dist files:
+await rm("./dist", { recursive: true, force: true });
 
 // Build src HTML files:
 for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src" })) {
