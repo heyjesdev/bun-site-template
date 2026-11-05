@@ -9,7 +9,7 @@
 		"module": "Preserve",
 		"moduleDetection": "force",
 		"jsx": "react-jsx",
-		"jsxImportSource": "@functions/jsx-runtime",
+		"jsxImportSource": "../build",
 		"allowJs": true,
 		"types": [
 			"bun"
@@ -30,9 +30,7 @@
 		"noUnusedParameters": false,
 		"noPropertyAccessFromIndexSignature": false,
 		"paths": {
-			"@components/*": ["./src/components/*"],
-			"@functions/*": ["./src/functions/*"],
-			"@packages/*": ["./src/packages/*"]
+			"@/*": ["./src/*"]
 		}
 	}
 }

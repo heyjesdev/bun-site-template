@@ -7,13 +7,13 @@ for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src" })) {
 	const result = await Bun.build({
 		entrypoints: [`./src/${file}`],
 		root: "./src",
-		outdir: "./build",
+		outdir: "./dist",
 		compile: true,
 		target: "browser",
 		minify: true,
 		jsx: {
 			runtime: "automatic",
-			importSource: "@functions/jsx-runtime",
+			importSource: "jsx-runtime",
 		}
 	});
 
@@ -24,7 +24,7 @@ for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src" })) {
 	}
 
 	/** Build index.html contents. */
-	const buildHTML = await Bun.file(`./build/${file}`).text();
+	const buildHTML = await Bun.file(`./dist/${file}`).text();
 
 	/** Minified index.html buffer. */
 	const output = minify(Buffer.from(buildHTML), {
@@ -46,7 +46,7 @@ for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src" })) {
 	});
 
 	// Overwrite build file with output contents:
-	await Bun.write(`./build/${file}`, output);
+	await Bun.write(`./dist/${file}`, output);
 
 	/** Data compressed over gzip. */
 	const gzip = Bun.gzipSync(Buffer.from(output));

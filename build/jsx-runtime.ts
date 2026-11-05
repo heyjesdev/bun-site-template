@@ -1,4 +1,4 @@
-import van from "@packages/mini-van";
+import van from "./mini-van";
 
 export function jsx(tag: keyof typeof van.tags | Function, props: any) {
 	if (typeof tag === "function") {
