@@ -67,6 +67,6 @@ for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src" })) {
 // Copy public folder into dist:
 await access("./public")
 	.then(() => cp("./public", "./dist", { recursive: true }))
-	.catch(error => {
+	.catch((error: NodeJS.ErrnoException) => {
 		if (error.code !== "ENOENT") throw error;
 	});
