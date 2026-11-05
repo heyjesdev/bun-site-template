@@ -1,7 +1,9 @@
+import { access, cp } from "node:fs/promises";
 import { Buffer } from "node:buffer";
 import { brotliCompressSync } from "node:zlib";
 import { minify } from "@minify-html/node";
 
+// Build src HTML files:
 for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src" })) {
 	/** Bun compilation result of source HTML. */
 	const result = await Bun.build({
@@ -58,3 +60,10 @@ for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src" })) {
 	console.log(file);
 	console.log("Output/Gzip/Brotli bytes:", output.byteLength, gzip.byteLength, brotli.byteLength);
 }
+
+// Copy public folder into dist:
+await access("./public")
+	.then(() => cp("./public", "./dist", { recursive: true }))
+	.catch(error => {
+		if (error.code !== "ENOENT") throw error;
+	});
