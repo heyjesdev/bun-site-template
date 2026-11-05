@@ -1,10 +1,13 @@
-import { access, cp, rm } from "node:fs/promises";
 import { Buffer } from "node:buffer";
 import { brotliCompressSync } from "node:zlib";
+import { cp, rm } from "node:fs/promises";
 import { minify } from "@minify-html/node";
 
 // Remove existing dist files:
 await rm("./dist", { recursive: true, force: true });
+
+/** Files processed by `Bun.build`. */
+const processed = new Set<string>();
 
 // Build src HTML files:
 for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src" })) {
@@ -16,6 +19,7 @@ for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src" })) {
 		compile: true,
 		target: "browser",
 		minify: true,
+		metafile: true,
 		jsx: {
 			runtime: "automatic",
 			importSource: "jsx-runtime",
@@ -26,6 +30,11 @@ for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src" })) {
 	if (!result.success) {
 		console.error("Bundle failure:", result.logs);
 		process.exit(1);
+	}
+
+	// Track processed files:
+	for (const input of Object.keys(result.metafile!.inputs)) {
+		processed.add(input);
 	}
 
 	/** Build index.html contents. */
@@ -64,9 +73,8 @@ for (const file of new Bun.Glob("**/*.html").scanSync({ cwd: "./src" })) {
 	console.log("Output/Gzip/Brotli bytes:", output.byteLength, gzip.byteLength, brotli.byteLength);
 }
 
-// Copy public folder into dist:
-await access("./public")
-	.then(() => cp("./public", "./dist", { recursive: true }))
-	.catch((error: NodeJS.ErrnoException) => {
-		if (error.code !== "ENOENT") throw error;
-	});
+// Copy non-processed src files:
+await cp("./src", "./dist", {
+	recursive: true,
+	filter: source => !processed.has(source)
+});
